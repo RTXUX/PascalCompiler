@@ -16,6 +16,7 @@ namespace PascalCompiler.Lexical {
     public class LexerStateMachine {
         private static readonly Regex RegexBinary = new Regex(@"^[0-1]+$");
         private static readonly Regex RegexOctal = new Regex(@"^[0-7]+$");
+        private static readonly Regex RegexDecimal = new Regex(@"^[0-9]+$");
         private static readonly Regex RegexHexadecimal = new Regex(@"^[0-9a-fA-F]+$");
         private State _state = State.TransitionNeeded;
         private char lastChar = '\0';
@@ -181,6 +182,8 @@ namespace PascalCompiler.Lexical {
                                         } else if (RegexOctal.IsMatch(substr)) {
                                             // Octal
                                             baseNumber = 8;
+                                        } else if (RegexDecimal.IsMatch(substr)) {
+                                            baseNumber = 10;
                                         } else if (RegexHexadecimal.IsMatch(substr)) {
                                             baseNumber = 16;
                                         } else {
@@ -199,6 +202,8 @@ namespace PascalCompiler.Lexical {
                                         // Decimal
                                         value = Convert.ToInt32(s);
                                     }
+                                } catch (OverflowException) {
+                                    throw new LexicalException(currentLine, startIndex, currentCursor - 1, $"Integer overflow \"{s}\"");
                                 } catch(Exception e) {
                                     if (e is LexicalException) throw;
                                     throw new LexicalException(currentLine, startIndex, currentCursor-1, $"Malformed integer interal \"{s}\"");
