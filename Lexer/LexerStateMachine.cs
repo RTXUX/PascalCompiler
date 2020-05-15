@@ -23,6 +23,7 @@ namespace PascalCompiler.Lexical {
         private int currentLine = 0;
         private int currentCursor = 0;
         private int currentOffset = 0;
+        private StringBuilder sb = new StringBuilder();
 
         public StreamReader input { get; set; }
 
@@ -58,6 +59,7 @@ namespace PascalCompiler.Lexical {
                         } else if (Mappings.CanBeIdentifier(lastChar, true)) {
                             _state = State.IdentifierOrKeyword;
                         } else if (lastChar == '\"') {
+                            sb.Clear();
                             _state = State.String;
                         } else if (char.IsDigit(lastChar)) {
                             _state = State.Number;
@@ -132,20 +134,20 @@ namespace PascalCompiler.Lexical {
                         if (AdvanceChar() != '\"') {
                             buffer[bufferFill++] = lastChar;
                             if (lastChar == '\\') {
-                                int ob = bufferFill-1;
-                                buffer[bufferFill] = AdvanceChar();
+                                buffer[bufferFill++] = AdvanceChar();
                                 try {
-                                    string es = Regex.Unescape(buffer.Slice(ob, 2).ToString());
-                                    bufferFill = ob;
-                                    buffer[bufferFill++] = es[0];
+                                    string es = Regex.Unescape(buffer.Slice(bufferFill-2, 2).ToString());
+                                    sb.Append(es);
                                 } catch {
-                                    throw new LexicalException(currentLine, currentCursor-2, currentCursor, $"Unknown string escape sequence \"{buffer.Slice(ob, 2).ToString()}\"");
+                                    throw new LexicalException(currentLine, currentCursor-2, currentCursor, $"Unknown string escape sequence \"{buffer.Slice(bufferFill-2, 2).ToString()}\"");
                                 }
+                            } else {
+                                sb.Append(lastChar);
                             }
                             
                         } else {
                             _state = State.TransitionNeeded;
-                            result = new StringLiteral() {LineNumber = currentLine, StartIndex = startIndex, EndIndex = currentCursor-1, Value = buffer.Slice(0, bufferFill).ToString()};
+                            result = new StringLiteral() {LineNumber = currentLine, StartIndex = startIndex, EndIndex = currentCursor-1, StringValue = buffer.Slice(0, bufferFill).ToString(), Value = sb.ToString()};
                             AdvanceChar();
                             return result;
                         }
