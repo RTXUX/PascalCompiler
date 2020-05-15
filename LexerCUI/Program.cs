@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using PascalCompiler.Lexical;
 using PascalCompiler.Lexical.Definition;
@@ -71,16 +72,16 @@ namespace PascalCompiler.Lexical.CUI
             foreach (var le in result) {
                 switch (le) {
                     case IdentifierElement ie:
-                        Console.Write($"<id:{ie.Value}> ");
+                        Console.Write($"<id, {ie.Value}> ");
                         break;
                     case StringLiteral sl:
-                        Console.Write($"<str:\"{sl.StringValue}\" ");
+                        Console.Write($"<string, \"{sl.StringValue}\" ");
                         break;
                     case IntegerLiteral il:
-                        Console.Write($"<num:{il.Value}> ");
+                        Console.Write($"<num, {il.Value}> ");
                         break;
                     case RealLiteral rl:
-                        Console.Write($"<real:{rl.Value}> ");
+                        Console.Write($"<real, {rl.Value}> ");
                         break;
                     case LineFeedElement lfe:
                         string s;

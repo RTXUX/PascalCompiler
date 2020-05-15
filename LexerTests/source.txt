@@ -1,9 +1,7 @@
 ﻿while (next<>nil)  do begin x:=6; y:=xy+z end;
-x = "asdad\"da\n\
-asda\""
+x = "asdad\"da\n\""
 x = 00110101010
 x = 0014233543
 x = 0021313dff
 x = 0x123f
 x = 0.312231
-x := 0x2342if

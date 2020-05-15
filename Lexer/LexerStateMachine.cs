@@ -225,9 +225,25 @@ namespace PascalCompiler.Lexical {
                         throw new LexicalException(currentLine, startIndex, currentCursor, $"Illegal state");
                     case State.Comment:
                         AdvanceChar();
-                        if (lastChar == '}') {
+                        if (lastChar == '\r') {
+                            try {
+                                if (Convert.ToInt32(input.Peek()) == '\n') {
+                                    AdvanceChar();
+                                }
+                            } catch {
+                                throw new LexicalException(currentLine, currentCursor - 2, currentCursor - 1, $"Incomplete comment, read EOF");
+                            }
+                            currentLine++;
+                            currentCursor = 0;
+                        } else if (lastChar == '\n') {
+                            currentLine++;
+                            currentCursor = 0;
+                        } else if (lastChar == '}') {
                             // End of comment
                             _state = State.TransitionNeeded;
+                            AdvanceChar();
+                        } else if (lastChar == '\0') {
+                            throw new LexicalException(currentLine, currentCursor-2, currentCursor-1, $"Incomplete comment, read EOF");
                         }
                         break;
                 }
