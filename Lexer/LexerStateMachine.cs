@@ -130,7 +130,7 @@ namespace PascalCompiler.Lexical {
                         }
                         break;
                     case State.String:
-                        if (char.IsControl(lastChar)) throw new LexicalException(currentLine, currentCursor-1-bufferFill, currentCursor-1, $"Malformed string (control character found) \"{buffer.Slice(0, bufferFill).ToString()}\"");
+                        if (char.IsControl(lastChar)) throw new LexicalException(currentLine, startIndex, currentCursor-1, $"Malformed string (control character found) \"{buffer.Slice(0, bufferFill-1).ToString()}\"");
                         if (AdvanceChar() != '\"') {
                             buffer[bufferFill++] = lastChar;
                             if (lastChar == '\\') {
