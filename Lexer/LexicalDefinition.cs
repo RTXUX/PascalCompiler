@@ -66,7 +66,7 @@ namespace PascalCompiler.Lexical.Definition {
         public KeywordType Type { get; set; }
     }
 
-    public enum OperatorType {
+    public enum NonwordType {
         Addition,
         Subtraction,
         Multiplication,
@@ -90,8 +90,8 @@ namespace PascalCompiler.Lexical.Definition {
         Caret
     }
 
-    public class OperatorElement : LexicalElement {
-        public OperatorType Type { get; set; }
+    public class NonwordElement : LexicalElement {
+        public NonwordType Type { get; set; }
     }
 
     public class IntegerLiteral : LexicalElement {
@@ -113,36 +113,36 @@ namespace PascalCompiler.Lexical.Definition {
     }
 
     public class Mappings {
-        private static readonly Dictionary<OperatorType, string> _OperatorToStringMap =
-            new Dictionary<OperatorType, string>() {
-                [OperatorType.Addition] = "+",
-                [OperatorType.Subtraction] = "-",
-                [OperatorType.Multiplication] = "*",
-                [OperatorType.Division] = "/",
-                [OperatorType.Equal] = "=",
-                [OperatorType.Less] = "<",
-                [OperatorType.Greater] = ">",
-                [OperatorType.LeftSquareBracket] = "[",
-                [OperatorType.RightSquareBracket] = "]",
-                [OperatorType.Dot] = ".",
-                [OperatorType.Comma] = ",",
-                [OperatorType.Assign] = ":=",
-                [OperatorType.Colon] = ":",
-                [OperatorType.Semicolon] = ";",
-                [OperatorType.LeftParentheses] = "(",
-                [OperatorType.RightParentheses] = ")",
-                [OperatorType.NotEqual] = "<>",
-                [OperatorType.LE] = "<=",
-                [OperatorType.GE] = ">=",
-                [OperatorType.DoubleDot] = "..",
-                [OperatorType.Caret] = "^"
+        private static readonly Dictionary<NonwordType, string> _NonwordToStringMap =
+            new Dictionary<NonwordType, string>() {
+                [NonwordType.Addition] = "+",
+                [NonwordType.Subtraction] = "-",
+                [NonwordType.Multiplication] = "*",
+                [NonwordType.Division] = "/",
+                [NonwordType.Equal] = "=",
+                [NonwordType.Less] = "<",
+                [NonwordType.Greater] = ">",
+                [NonwordType.LeftSquareBracket] = "[",
+                [NonwordType.RightSquareBracket] = "]",
+                [NonwordType.Dot] = ".",
+                [NonwordType.Comma] = ",",
+                [NonwordType.Assign] = ":=",
+                [NonwordType.Colon] = ":",
+                [NonwordType.Semicolon] = ";",
+                [NonwordType.LeftParentheses] = "(",
+                [NonwordType.RightParentheses] = ")",
+                [NonwordType.NotEqual] = "<>",
+                [NonwordType.LE] = "<=",
+                [NonwordType.GE] = ">=",
+                [NonwordType.DoubleDot] = "..",
+                [NonwordType.Caret] = "^"
             };
 
-        public static readonly IReadOnlyDictionary<OperatorType, string> OperatorToStringMap = _OperatorToStringMap;
-        private static Dictionary<string, OperatorType> _StringToOperatorMap = new Dictionary<string, OperatorType>(comparer: StringComparer.OrdinalIgnoreCase);
-        public static readonly IReadOnlyDictionary<string, OperatorType> StringToOperatorMap = _StringToOperatorMap;
+        public static readonly IReadOnlyDictionary<NonwordType, string> NonwordToStringMap = _NonwordToStringMap;
+        private static Dictionary<string, NonwordType> _StringToNonwordMap = new Dictionary<string, NonwordType>(comparer: StringComparer.OrdinalIgnoreCase);
+        public static readonly IReadOnlyDictionary<string, NonwordType> StringToNonwordMap = _StringToNonwordMap;
 
-        private static readonly HashSet<char> OperatorChars = new HashSet<char>();
+        private static readonly HashSet<char> NonwordChars = new HashSet<char>();
 
         private static readonly Dictionary<KeywordType, string> _KeywordToStringMap =
             new Dictionary<KeywordType, string>();
@@ -158,7 +158,7 @@ namespace PascalCompiler.Lexical.Definition {
         private const string LegalIdentifierBeginCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$_";
 
         static Mappings() {
-            InitializeOperatorMapping();
+            InitializeNonwordMapping();
             InitializeKeywordMap();
         }
 
@@ -170,17 +170,17 @@ namespace PascalCompiler.Lexical.Definition {
             }
         }
 
-        private static void InitializeOperatorMapping() {
-            foreach (var item in OperatorToStringMap) {
-                _StringToOperatorMap.Add(item.Value, item.Key);
+        private static void InitializeNonwordMapping() {
+            foreach (var item in NonwordToStringMap) {
+                _StringToNonwordMap.Add(item.Value, item.Key);
                 foreach (char c in item.Value) {
-                    OperatorChars.Add(c);
+                    NonwordChars.Add(c);
                 }
             }
         }
 
-        public static bool CanBeOperator(char c) {
-            return OperatorChars.Contains(c);
+        public static bool CanBeNonword(char c) {
+            return NonwordChars.Contains(c);
         }
 
         public static bool CanBeIdentifier(char c, bool begin = false) {

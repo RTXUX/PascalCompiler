@@ -4,4 +4,5 @@
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;MSTest::48C5030E-6F5B-4339-907A-D80D90AC773D::.NETFramework,Version=v4.7.2::PascalCompiler.Lexical.Tests.LexerTests.LexTest&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
-&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
+&lt;/SessionState&gt;</s:String>
+	<s:Boolean x:Key="/Default/UserDictionary/Words/=Nonword/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>

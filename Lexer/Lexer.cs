@@ -32,20 +32,20 @@ namespace PascalCompiler.Lexical {
                     // WhiteSpace, Ignore and advance
                     input.Read();
                     currentCursor += 1;
-                } else if (Mappings.CanBeOperator(peekChar)) {
-                    // Operators
+                } else if (Mappings.CanBeNonword(peekChar)) {
+                    // Nonwords
                     beginOfToken = currentCursor;
                     int length = 0;
-                    while (!input.EndOfStream && Mappings.CanBeOperator(peekChar = Convert.ToChar(input.Peek()))) {
+                    while (!input.EndOfStream && Mappings.CanBeNonword(peekChar = Convert.ToChar(input.Peek()))) {
                         buffer[length++] = Convert.ToChar(input.Read());
                         currentCursor++;
                     }
 
                     endOfToken = currentCursor;
                     string s = buffer.Slice(0, length).ToString();
-                    OperatorType ot;
-                    if (Mappings.StringToOperatorMap.TryGetValue(s, out ot)) {
-                        tokens.AddLast(new OperatorElement() {
+                    NonwordType ot;
+                    if (Mappings.StringToNonwordMap.TryGetValue(s, out ot)) {
+                        tokens.AddLast(new NonwordElement() {
                             LineNumber = currentLine,
                             StartIndex = beginOfToken,
                             EndIndex = endOfToken,

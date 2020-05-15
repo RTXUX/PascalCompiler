@@ -10,7 +10,7 @@ using PascalCompiler.Lexical.Definition;
 namespace PascalCompiler.Lexical {
 
     enum State {
-        TransitionNeeded, IdentifierOrKeyword, Operator, WhiteCharacters, CR, LF, String, Number, Comment
+        TransitionNeeded, IdentifierOrKeyword, Nonword, WhiteCharacters, CR, LF, String, Number, Comment
     }
 
     public class LexerStateMachine {
@@ -54,8 +54,8 @@ namespace PascalCompiler.Lexical {
                             _state = State.CR;
                         } else if (lastChar == '\n') {
                             _state = State.LF;
-                        } else if (Mappings.CanBeOperator(lastChar)) {
-                            _state = State.Operator;
+                        } else if (Mappings.CanBeNonword(lastChar)) {
+                            _state = State.Nonword;
                         } else if (Mappings.CanBeIdentifier(lastChar, true)) {
                             _state = State.IdentifierOrKeyword;
                         } else if (lastChar == '\"') {
@@ -102,17 +102,17 @@ namespace PascalCompiler.Lexical {
                             _state = State.TransitionNeeded;
                         }
                         continue;
-                    case State.Operator:
+                    case State.Nonword:
                         buffer[bufferFill++] = lastChar;
-                        if (!Mappings.CanBeOperator(AdvanceChar())) {
+                        if (!Mappings.CanBeNonword(AdvanceChar())) {
                             _state = State.TransitionNeeded;
                             string s = buffer.Slice(0, bufferFill).ToString();
-                            OperatorType ot;
-                            if (Mappings.StringToOperatorMap.TryGetValue(s, out ot)) {
-                                result = new OperatorElement() {LineNumber = currentLine, StartIndex = currentCursor-1-bufferFill, EndIndex = currentCursor-1, Type = ot, StringValue = s};
+                            NonwordType ot;
+                            if (Mappings.StringToNonwordMap.TryGetValue(s, out ot)) {
+                                result = new NonwordElement() {LineNumber = currentLine, StartIndex = currentCursor-1-bufferFill, EndIndex = currentCursor-1, Type = ot, StringValue = s};
                                 return result;
                             } else {
-                                throw new LexicalException(currentLine, currentCursor-1-bufferFill, currentCursor-1, $"Unknown operator: \"{s}\"");
+                                throw new LexicalException(currentLine, currentCursor-1-bufferFill, currentCursor-1, $"Unknown nonword: \"{s}\"");
                             }
                         } 
                         break;
