@@ -7,6 +7,7 @@
     &lt;TestId&gt;MSTest::48C5030E-6F5B-4339-907A-D80D90AC773D::.NETFramework,Version=v4.7.2::PascalCompiler.Lexical.Tests.LexerTests.NumberTest&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;MSTest::48C5030E-6F5B-4339-907A-D80D90AC773D::.NETFramework,Version=v4.7.2::PascalCompiler.Lexical.Tests.LexerTests.MalformedNumberTest&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;MSTest::48C5030E-6F5B-4339-907A-D80D90AC773D::.NETFramework,Version=v4.7.2::PascalCompiler.Lexical.Tests.LexerTests.CommentTest&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;MSTest::48C5030E-6F5B-4339-907A-D80D90AC773D::.NETFramework,Version=v4.7.2::PascalCompiler.Lexical.Tests.LexerTests.LexTest&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	
