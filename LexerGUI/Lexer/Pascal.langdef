@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+Actipro Syntax Language Definition (.langdef)
+  For use with Actipro SyntaxEditor and related products.
+  http://www.actiprosoftware.com
+
+'Pascal' language created by Actipro Software LLC.
+  Copyright (c) 2001-2020 Actipro Software LLC.  All rights reserved.
+
+-->
+<LanguageDefinition LanguageKey="Pascal" Creator="Actipro Software LLC" Copyright="Copyright (c) 2001-2020 Actipro Software LLC.  All rights reserved." xmlns="http://schemas.actiprosoftware.com/langdef/1.0">
+	<!-- Classification types -->
+	<LanguageDefinition.ClassificationTypes>
+		<ClassificationType Key="Comment" DefaultStyle="#FF008000" />
+		<ClassificationType Key="Identifier" />
+		<ClassificationType Key="Keyword" DefaultStyle="#FF0000FF" />
+		<ClassificationType Key="Number" />
+		<ClassificationType Key="Operator" />
+		<ClassificationType Key="String" DefaultStyle="#FF800000" />
+	</LanguageDefinition.ClassificationTypes>
+	<!-- Lexer -->
+	<LanguageDefinition.Lexer>
+		<DynamicLexer>
+			<DynamicLexer.Macros>
+				<Macro Key="Word" Pattern="[a-zA-Z0-9]" />
+				<Macro Key="NonWord" Pattern="[^a-zA-Z0-9]" />
+			</DynamicLexer.Macros>
+			<!-- Default state -->
+			<State Id="1" Key="Default">
+				<State.ChildStates>
+					<StateRef Key="PrimaryString" />
+					<StateRef Key="MultiLineComment" />
+				</State.ChildStates>
+				<RegexPatternGroup TokenId="1" TokenKey="Whitespace" Pattern="{Whitespace}+" />
+				<RegexPatternGroup TokenId="2" TokenKey="LineTerminator" Pattern="{LineTerminator}" />
+				<ExplicitPatternGroup TokenId="3" TokenKey="OpenParenthesis" Pattern="(" LookAheadPattern="$|[^\*\.]" />
+				<ExplicitPatternGroup TokenId="4" TokenKey="CloseParenthesis" Pattern=")" />
+				<RegexPatternGroup TokenId="5" TokenKey="OpenSquareBrace">
+					<RegexPattern Value="\[" />
+					<RegexPattern Value="\(\." />
+				</RegexPatternGroup>
+				<RegexPatternGroup TokenId="6" TokenKey="CloseSquareBrace">
+					<RegexPattern Value="\]" />
+					<RegexPattern Value="\.\)" />
+				</RegexPatternGroup>
+				<ExplicitPatternGroup TokenId="7" TokenKey="Punctuation" Pattern=".. . , : ; ^ @" />
+				<ExplicitPatternGroup TokenId="8" TokenKey="Keyword" ClassificationTypeKey="Keyword" LookAheadPattern="{NonWord}|\z" CaseSensitivity="Sensitive">
+					<ExplicitPatterns><![CDATA[
+						and array begin case const div downto do else end file for function goto if in label mod nil not of or
+						packed procedure program record repeat set then to type until var while with
+					]]></ExplicitPatterns>
+				</ExplicitPatternGroup>
+				<RegexPatternGroup TokenId="9" TokenKey="Identifier" ClassificationTypeKey="Identifier" Pattern="{Alpha}({Word})*" />
+				<ExplicitPatternGroup TokenId="10" TokenKey="Operator" ClassificationTypeKey="Operator">
+					<ExplicitPatterns><![CDATA[
+						* + - / := <= <> < = >= >
+					]]></ExplicitPatterns>
+				</ExplicitPatternGroup>
+				<RegexPatternGroup TokenId="11" TokenKey="RealNumber" ClassificationTypeKey="Number" LookAheadPattern="{NonWord}|\z">
+					<RegexPattern Value="[\+\-]? {Digit}+ \. {Digit}+ (e [\+\-]? {Digit}+)?" />
+					<RegexPattern Value="[\+\-]? {Digit}+ e [\+\-]? {Digit}+" />
+				</RegexPatternGroup>
+				<RegexPatternGroup TokenId="12" TokenKey="IntegerNumber" ClassificationTypeKey="Number" Pattern="[\+\-]? {Digit}+" LookAheadPattern="{NonWord}|\z" />
+			</State>
+			<!-- PrimaryString state -->
+			<State Id="2" Key="PrimaryString" DefaultTokenId="13" DefaultTokenKey="PrimaryStringText" DefaultClassificationTypeKey="String">
+				<State.Scopes>
+					<Scope>
+						<Scope.StartPatternGroup>
+							<ExplicitPatternGroup TokenId="14" TokenKey="PrimaryStringStartDelimiter" Pattern="&quot;" />
+						</Scope.StartPatternGroup>
+						<Scope.EndPatternGroup>
+							<RegexPatternGroup TokenId="15" TokenKey="PrimaryStringEndDelimiter" Pattern="((?&lt;!\\)\&quot;|\n)" />
+						</Scope.EndPatternGroup>
+					</Scope>
+				</State.Scopes>
+				<ExplicitPatternGroup TokenId="16" TokenKey="PrimaryStringEscapedDelimiter" Pattern="&quot;&quot;" />
+				<RegexPatternGroup TokenId="13" TokenKey="PrimaryStringText" Pattern="(\\&quot;|[^&quot;\n])+" />
+			</State>
+			<!-- MultiLineComment state -->
+			<State Id="3" Key="MultiLineComment" DefaultTokenId="17" DefaultTokenKey="MultiLineCommentText" DefaultClassificationTypeKey="Comment">
+				<State.Scopes>
+					<Scope>
+						<Scope.StartPatternGroup>
+							<ExplicitPatternGroup TokenId="18" TokenKey="MultiLineCommentStartDelimiter" Pattern="{" />
+						</Scope.StartPatternGroup>
+						<Scope.EndPatternGroup>
+							<ExplicitPatternGroup TokenId="19" TokenKey="MultiLineCommentEndDelimiter" Pattern="}" />
+						</Scope.EndPatternGroup>
+					</Scope>
+					<Scope>
+						<Scope.StartPatternGroup>
+							<ExplicitPatternGroup TokenId="18" TokenKey="MultiLineCommentStartDelimiter" Pattern="(*" />
+						</Scope.StartPatternGroup>
+						<Scope.EndPatternGroup>
+							<ExplicitPatternGroup TokenId="19" TokenKey="MultiLineCommentEndDelimiter" Pattern="*)" />
+						</Scope.EndPatternGroup>
+					</Scope>
+				</State.Scopes>
+				<RegexPatternGroup TokenId="20" TokenKey="MultiLineCommentLineTerminator" Pattern="\n" />
+				<RegexPatternGroup TokenId="17" TokenKey="MultiLineCommentText" Pattern="[^\}\*\n]+" />
+			</State>
+		</DynamicLexer>
+	</LanguageDefinition.Lexer>
+	<!-- Example text -->
+	<LanguageDefinition.ExampleText><![CDATA[{ Sample Pascal Program }
+program sample(output);
+	var i : integer;
+
+	procedure print(var j: integer);
+
+		function next(k: integer): integer;
+		begin
+			next := k + 1
+		end;
+
+	begin
+		writeln('The total is: ', j);
+		j := next(j)
+	end;
+
+begin
+	i := 1;
+	while i <= 10 do print(i)
+end.
+]]></LanguageDefinition.ExampleText>
+</LanguageDefinition>

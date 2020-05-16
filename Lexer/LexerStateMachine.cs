@@ -104,6 +104,19 @@ namespace PascalCompiler.Lexical {
                         continue;
                     case State.Nonword:
                         buffer[bufferFill++] = lastChar;
+                        if (!Mappings.CanBePairedNonword(lastChar)) {
+                            AdvanceChar();
+                            _state = State.TransitionNeeded;
+                            string s = buffer.Slice(0, bufferFill).ToString();
+                            NonwordType ot;
+                            if (Mappings.StringToNonwordMap.TryGetValue(s, out ot)) {
+                                result = new NonwordElement() { LineNumber = currentLine, StartIndex = currentCursor - 1 - bufferFill, EndIndex = currentCursor - 1, Type = ot, StringValue = s };
+                                return result;
+                            }
+                            else {
+                                throw new LexicalException(currentLine, currentCursor - 1 - bufferFill, currentCursor - 1, $"Unknown nonword: \"{s}\"");
+                            }
+                        }
                         if (!Mappings.CanBeNonword(AdvanceChar())) {
                             _state = State.TransitionNeeded;
                             string s = buffer.Slice(0, bufferFill).ToString();
@@ -147,7 +160,7 @@ namespace PascalCompiler.Lexical {
                             
                         } else {
                             _state = State.TransitionNeeded;
-                            result = new StringLiteral() {LineNumber = currentLine, StartIndex = startIndex, EndIndex = currentCursor-1, StringValue = buffer.Slice(0, bufferFill).ToString(), Value = sb.ToString()};
+                            result = new StringLiteral() {LineNumber = currentLine, StartIndex = startIndex, EndIndex = currentCursor, StringValue = buffer.Slice(0, bufferFill).ToString(), Value = sb.ToString()};
                             AdvanceChar();
                             return result;
                         }

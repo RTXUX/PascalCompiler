@@ -187,11 +187,15 @@ namespace PascalCompiler.Lexical.Definition {
             if (begin) return LegalIdentifierBeginCharacters.Contains(c);
             else return IdentifierCharacters.Contains(c);
         }
+
+        public static bool CanBePairedNonword(char c) {
+            return ":<>=.".Contains(c);
+        }
     }
 
     public class LexicalException : Exception {
-        private int line, begin, end;
-        private string reason;
+        public int line, begin, end;
+        public string reason;
 
         public LexicalException(int line, int begin, int end, string reason)
             : base(String.Format("{0}:[{1},{2}): {3}", line, begin, end, reason)) {

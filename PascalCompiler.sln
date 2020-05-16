@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LexerTests", "LexerTests\Le
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LexerCUI", "LexerCUI\LexerCUI.csproj", "{FFC68E3B-693E-4BCE-908E-3BCFB5CD23F8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LexerGUI", "LexerGUI\LexerGUI.csproj", "{E5FA31C0-A5C4-4678-80A5-147A7191F59E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{FFC68E3B-693E-4BCE-908E-3BCFB5CD23F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FFC68E3B-693E-4BCE-908E-3BCFB5CD23F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FFC68E3B-693E-4BCE-908E-3BCFB5CD23F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5FA31C0-A5C4-4678-80A5-147A7191F59E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5FA31C0-A5C4-4678-80A5-147A7191F59E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5FA31C0-A5C4-4678-80A5-147A7191F59E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5FA31C0-A5C4-4678-80A5-147A7191F59E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
