@@ -8,47 +8,49 @@ using System.Threading.Tasks;
 using PascalCompiler.Lexical;
 using PascalCompiler.Lexical.Definition;
 
-namespace PascalCompiler.Lexical.CUI
-{
-    class Program
-    {
+namespace PascalCompiler.Lexical.CUI {
+    class Program {
         static void Main(string[] args) {
             LinkedList<LexicalElement> result = new LinkedList<LexicalElement>();
-            LinkedList<KeyValuePair<string, IdentifierElement>> symbolTable = new LinkedList<KeyValuePair<string, IdentifierElement>>();
-            if (args.Length != 1) {
-                var ms = new MemoryStream();
-                var writer = new StreamWriter(ms);
-                int ch;
-                while ((ch = Console.Read()) != -1) {
-                    writer.Write(Convert.ToChar(ch));
-                }
-                writer.Flush();
-                ms.Seek(0, SeekOrigin.Begin);
-            } else {
-                string filename = args[0];
-                try
-                {
-                    using (var fs = new FileStream(filename, FileMode.Open))
-                    {
-                        using (var ss = new StreamReader(fs))
-                        {
+            LinkedList<KeyValuePair<string, IdentifierElement>> symbolTable =
+                new LinkedList<KeyValuePair<string, IdentifierElement>>();
+            try {
+                if (args.Length != 1) {
+                    var ms = new MemoryStream();
+                    var writer = new StreamWriter(ms);
+                    int ch;
+                    while ((ch = Console.Read()) != -1) {
+                        writer.Write(Convert.ToChar(ch));
+                    }
+
+                    writer.Flush();
+                    ms.Seek(0, SeekOrigin.Begin);
+                    LexerStateMachine l = new LexerStateMachine(new StreamReader(ms));
+                    l.AdvanceChar();
+                    LexicalElement le;
+                    while ((le = l.NextToken()) != null) {
+                        result.AddLast(le);
+                    }
+                } else {
+                    string filename = args[0];
+
+                    using (var fs = new FileStream(filename, FileMode.Open)) {
+                        using (var ss = new StreamReader(fs)) {
                             LexerStateMachine l = new LexerStateMachine(ss);
                             l.AdvanceChar();
                             LexicalElement le;
-                            while ((le = l.NextToken()) != null)
-                            {
+                            while ((le = l.NextToken()) != null) {
                                 result.AddLast(le);
                             }
                         }
                     }
                 }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Error:");
-                    Console.WriteLine(e.Message);
-                    return;
-                }
+            } catch (Exception e) {
+                Console.WriteLine("Error: ");
+                Console.WriteLine(e.Message);
+                return;
             }
+
             BuildSymbolTable(symbolTable, result);
             PrintLexeme(result);
             Console.WriteLine();
@@ -58,21 +60,17 @@ namespace PascalCompiler.Lexical.CUI
 
         static void BuildSymbolTable(LinkedList<KeyValuePair<string, IdentifierElement>> symbolTable,
             LinkedList<LexicalElement> result) {
-            foreach (var le in result)
-            {
-                if (le is IdentifierElement ie)
-                {
+            foreach (var le in result) {
+                if (le is IdentifierElement ie) {
                     bool found = false;
-                    foreach (var sym in symbolTable)
-                    {
-                        if (sym.Key == ie.Value)
-                        {
+                    foreach (var sym in symbolTable) {
+                        if (sym.Key == ie.Value) {
                             found = true;
                             break;
                         }
                     }
-                    if (!found)
-                    {
+
+                    if (!found) {
                         symbolTable.AddLast(new KeyValuePair<string, IdentifierElement>(ie.Value, ie));
                     }
                 }
@@ -108,6 +106,7 @@ namespace PascalCompiler.Lexical.CUI
                                 s = "LF";
                                 break;
                         }
+
                         Console.Write($"<{s}> ");
                         break;
                     default:
@@ -115,14 +114,17 @@ namespace PascalCompiler.Lexical.CUI
                         break;
                 }
             }
+
             Console.WriteLine();
         }
 
         static void PrintSymbolTable(LinkedList<KeyValuePair<string, IdentifierElement>> symbolTable) {
             Console.WriteLine("Symbol Table:");
             foreach (var sym in symbolTable) {
-                Console.WriteLine($"Identifier: \"{sym.Key}\", first appear at Line {sym.Value.LineNumber}, [{sym.Value.StartIndex}, {sym.Value.EndIndex})");
+                Console.WriteLine(
+                    $"Identifier: \"{sym.Key}\", first appear at Line {sym.Value.LineNumber}, [{sym.Value.StartIndex}, {sym.Value.EndIndex})");
             }
+
             Console.WriteLine();
         }
     }
