@@ -13,29 +13,41 @@ namespace PascalCompiler.Lexical.CUI
     class Program
     {
         static void Main(string[] args) {
-            if (args.Length != 1) {
-                Console.WriteLine("Need exactly one argument: File path to analyze");
-                return;
-            }
-
-            string filename = args[0];
             LinkedList<LexicalElement> result = new LinkedList<LexicalElement>();
             LinkedList<KeyValuePair<string, IdentifierElement>> symbolTable = new LinkedList<KeyValuePair<string, IdentifierElement>>();
-            try {
-                using (var fs = new FileStream(filename, FileMode.Open)) {
-                    using (var ss = new StreamReader(fs)) {
-                        LexerStateMachine l = new LexerStateMachine(ss);
-                        l.AdvanceChar();
-                        LexicalElement le;
-                        while ((le = l.NextToken()) != null) {
-                            result.AddLast(le);
+            if (args.Length != 1) {
+                var ms = new MemoryStream();
+                var writer = new StreamWriter(ms);
+                int ch;
+                while ((ch = Console.Read()) != -1) {
+                    writer.Write(Convert.ToChar(ch));
+                }
+                writer.Flush();
+                ms.Seek(0, SeekOrigin.Begin);
+            } else {
+                string filename = args[0];
+                try
+                {
+                    using (var fs = new FileStream(filename, FileMode.Open))
+                    {
+                        using (var ss = new StreamReader(fs))
+                        {
+                            LexerStateMachine l = new LexerStateMachine(ss);
+                            l.AdvanceChar();
+                            LexicalElement le;
+                            while ((le = l.NextToken()) != null)
+                            {
+                                result.AddLast(le);
+                            }
                         }
                     }
                 }
-            } catch(Exception e) {
-                Console.WriteLine("Error:");
-                Console.WriteLine(e.Message);
-                return;
+                catch (Exception e)
+                {
+                    Console.WriteLine("Error:");
+                    Console.WriteLine(e.Message);
+                    return;
+                }
             }
             BuildSymbolTable(symbolTable, result);
             PrintLexeme(result);
