@@ -85,7 +85,7 @@ namespace PascalCompiler.Lexical.CUI {
                         Console.Write($"<id, {ie.Value}> ");
                         break;
                     case StringLiteral sl:
-                        Console.Write($"<string, \"{sl.StringValue}\" ");
+                        Console.Write($"<string, \"{sl.StringValue}\"> ");
                         break;
                     case IntegerLiteral il:
                         Console.Write($"<num, {il.Value}> ");

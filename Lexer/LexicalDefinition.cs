@@ -57,7 +57,7 @@ namespace PascalCompiler.Lexical.Definition {
         Else,
         Main,
         Record,
-
+        End,
         With /*, False, True, Integer, Boolean, Real,
         Char*/
     }
