@@ -36,6 +36,10 @@ namespace PascalCompiler.Syntax.Generator
         public TerminalPredicate(Predicate<LexicalElement> predicate) {
             this.Predicate = predicate;
         }
+
+        public override string ToString() {
+            return Name;
+        }
     }
 
     public enum AssociativityType {
@@ -60,6 +64,10 @@ namespace PascalCompiler.Syntax.Generator
         public override int GetHashCode() {
             return (Key != null ? Key.GetHashCode() : 0);
         }
+
+        public override string ToString() {
+            return Key.ToString();
+        }
     }
 
     public sealed class EpsilonPredicate : SyntaxPredicate {
@@ -69,6 +77,10 @@ namespace PascalCompiler.Syntax.Generator
 
         public static IEnumerable<SyntaxPredicate> Enumerator() {
             yield return Instance;
+        }
+
+        public override string ToString() {
+            return "ε";
         }
     }
 
@@ -108,6 +120,19 @@ namespace PascalCompiler.Syntax.Generator
 
         public static Item Advance(in Item item) {
             return new Item() {ProductionRule = item.ProductionRule, Cursor = item.Cursor+1};
+        }
+
+        public override string ToString() {
+            string[] t = new string[ProductionRule.Length+1];
+            int index = 0;
+            for (int i = 0; i < Cursor; ++i) {
+                t[index++] = ProductionRule.Predicates[i].ToString();
+            }
+            t[index++] = "·";
+            for (int i = Cursor; i < ProductionRule.Length; ++i) {
+                t[index++] = ProductionRule.Predicates[i].ToString();
+            }
+            return String.Join(" ", t);
         }
     }
 
