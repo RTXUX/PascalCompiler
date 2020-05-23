@@ -54,7 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Lexer.cs" />
+    <Compile Include="Lexer1.cs" />
     <Compile Include="LexerStateMachine.cs" />
     <Compile Include="LexicalDefinition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

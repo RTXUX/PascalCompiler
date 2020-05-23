@@ -112,6 +112,18 @@ namespace PascalCompiler.Syntax.Generator
 
 
         public ProductionRule(object key, Type leftType) : this(key, leftType, new List<SyntaxPredicate>()) { }
+
+        public override string ToString() {
+            string[] s = new string[Predicates.Count+2];
+            int index = 0;
+            s[index++] = Key.ToString();
+            s[index++] = "->";
+            foreach (var syntaxPredicate in Predicates) {
+                s[index++] = syntaxPredicate.ToString();
+            }
+
+            return String.Join(" ", s);
+        }
     }
 
     public struct Item {
@@ -123,8 +135,10 @@ namespace PascalCompiler.Syntax.Generator
         }
 
         public override string ToString() {
-            string[] t = new string[ProductionRule.Length+1];
+            string[] t = new string[ProductionRule.Length+3];
             int index = 0;
+            t[index++] = ProductionRule.Key.ToString();
+            t[index++] = "->";
             for (int i = 0; i < Cursor; ++i) {
                 t[index++] = ProductionRule.Predicates[i].ToString();
             }

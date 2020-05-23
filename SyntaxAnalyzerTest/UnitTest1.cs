@@ -4,6 +4,7 @@ using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using ClosedXML.Excel;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PascalCompiler.Lexical;
@@ -101,7 +102,7 @@ namespace SyntaxAnalyzerTest
             var treeRoot = driver.Parse(q,
                 CommonUtils.Closure(
                     new HashSet<Item>() {new Item() {ProductionRule = PascalDefinition.ProductionRules[0], Cursor = 0}},
-                    driver.ProductionDictionary), typeof(SNode));
+                    driver.ProductionDictionary), typeof(SNode), new List<ParserConfiguration>());
             Assert.IsInstanceOfType(treeRoot, typeof(SNode));
         }
 
@@ -120,7 +121,7 @@ namespace SyntaxAnalyzerTest
             foreach (var rule in PascalDefinition.ProductionRules) {
                 pdIndexDict.Add(rule, ++index);
             }
-            index = 0;
+            index = 1;
             var terminalIndexDict = new Dictionary<TerminalPredicate, int>();
             foreach (var state in slr1table.States.Values) {
                 foreach (var actionKey in state.Action.Keys) {
@@ -148,11 +149,13 @@ namespace SyntaxAnalyzerTest
                 dr[kv.Value.ToString()] = kv.Key.ToString();
             }
 
-            dr["0"] = 0;
+            // dr["0"] = 0;
             dt.Rows.Add(dr);
             foreach (var state in slr1table.States.Values) {
                 dr = dt.NewRow();
-                dr[0] = stateIndexDict[state];
+                dr[0] = String.Join("\n", from item in state.ItemSet select item.ToString());
+                dr[1] = stateIndexDict[state];
+
                 foreach (var kv in state.Action) {
                     string s = "";
                     if (kv.Value is ShiftOperation so) {
@@ -172,8 +175,26 @@ namespace SyntaxAnalyzerTest
 
                 dt.Rows.Add(dr);
             }
+            var dt2 = new DataTable();
+            dt2.Columns.Add("ID");
+            dt2.Columns.Add("ProdRule");
+            foreach (var kv in pdIndexDict) {
+                var row = dt2.NewRow();
+                row["ID"] = kv.Value;
+                string[] s = new string[kv.Key.Predicates.Count+2];
+                index = 0;
+                s[index++] = kv.Key.Key.ToString();
+                s[index++] = "->";
+                foreach (var predicate in kv.Key.Predicates) {
+                    s[index++] = predicate.ToString();
+                }
+
+                row["ProdRule"] = String.Join(" ", s);
+                dt2.Rows.Add(row);
+            }
             XLWorkbook xb = new XLWorkbook();
             xb.Worksheets.Add(dt, "a");
+            xb.Worksheets.Add(dt2, "ProdRule");
             xb.SaveAs("Table.xlsx");
         }
 

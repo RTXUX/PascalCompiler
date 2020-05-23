@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using PascalCompiler.Lexical.Definition;
 
 namespace PascalCompiler.Lexical {
-    public class Lexer {
+    public class Lexer1 {
         private static readonly Regex RegexOctal = new Regex("^[0-7]+$");
         private static readonly Regex RegexHexical = new Regex("^[0-9a-f]+$");
         public LinkedList<LexicalElement> Lex(StreamReader input) {

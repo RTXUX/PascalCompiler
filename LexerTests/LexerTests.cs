@@ -27,7 +27,7 @@ namespace PascalCompiler.Lexical.Tests
         [TestMethod()]
         public void LexTest()
         {
-            /*var l = new Lexer();
+            /*var l = new Lexer1();
             LinkedList<LexicalElement> result;
             using (var fileStream = new FileStream("source.txt", FileMode.Open)) {
                 result = l.Lex(new StreamReader(fileStream));

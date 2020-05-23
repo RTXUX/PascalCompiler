@@ -1,0 +1,23 @@
+﻿<Window x:Class="SyntaxAnalyzerGUI.AnalyzerHistory"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SyntaxAnalyzerGUI"
+        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+        mc:Ignorable="d"
+        Title="分析器历史" Height="450" Width="800"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    <Grid>
+        <ListView x:Name="HistoryList" Initialized="HistoryList_Initialized">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="状态栈" Width="200" DisplayMemberBinding="{Binding Path=states}"/>
+                    <GridViewColumn Header="节点栈" Width="200" DisplayMemberBinding="{Binding Path=nodes}"/>
+                    <GridViewColumn Header="输入队列" Width="200" DisplayMemberBinding="{Binding Path=inputs}"/>
+                    <GridViewColumn Header="操作" Width="200" DisplayMemberBinding="{Binding Path=operation}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>
+</Window>
