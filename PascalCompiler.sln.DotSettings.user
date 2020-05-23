@@ -1,14 +1,16 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 	<s:String x:Key="/Default/CodeInspection/Highlighting/AnalysisEnabled/@EntryValue">SOLUTION</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=fe35f9b3_002D499a_002D454e_002Db66c_002D00ca4f2ce23c/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="StringEscapeTest1" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=a92d4f6f_002D94d9_002D4432_002Da61a_002Dc42190805b7c/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="GeneratorTest" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
-    &lt;TestId&gt;MSTest::48C5030E-6F5B-4339-907A-D80D90AC773D::.NETFramework,Version=v4.7.2::PascalCompiler.Lexical.Tests.LexerTests.StringEscapeTest1&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;MSTest::48C5030E-6F5B-4339-907A-D80D90AC773D::.NETFramework,Version=v4.7.2::PascalCompiler.Lexical.Tests.LexerTests.StringMalformedTest1&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;MSTest::48C5030E-6F5B-4339-907A-D80D90AC773D::.NETFramework,Version=v4.7.2::PascalCompiler.Lexical.Tests.LexerTests.NumberTest&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;MSTest::48C5030E-6F5B-4339-907A-D80D90AC773D::.NETFramework,Version=v4.7.2::PascalCompiler.Lexical.Tests.LexerTests.MalformedNumberTest&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;MSTest::48C5030E-6F5B-4339-907A-D80D90AC773D::.NETFramework,Version=v4.7.2::PascalCompiler.Lexical.Tests.LexerTests.CommentTest&lt;/TestId&gt;&#xD;
-    &lt;TestId&gt;MSTest::48C5030E-6F5B-4339-907A-D80D90AC773D::.NETFramework,Version=v4.7.2::PascalCompiler.Lexical.Tests.LexerTests.LexTest&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;MSTest::268427F2-960F-4386-9EEF-183F1182D836::.NETFramework,Version=v4.7.2::SyntaxAnalyzerTest.UtilsTest.GeneratorTest&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;MSTest::268427F2-960F-4386-9EEF-183F1182D836::.NETFramework,Version=v4.7.2::SyntaxAnalyzerTest.UtilsTest.PrintTable&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
+	
+	
+	
+	
+	
+	
 	
 	<s:Boolean x:Key="/Default/UserDictionary/Words/=Nonword/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>

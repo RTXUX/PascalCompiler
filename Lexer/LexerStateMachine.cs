@@ -43,7 +43,7 @@ namespace PascalCompiler.Lexical {
             Span<char> buffer = stackalloc char[129];
             int bufferFill = 0;
             bool run = true;
-            if (input.EndOfStream) return null;
+            // if (input.EndOfStream) return null;
             int startIndex = currentCursor-1;
             while (result == null && run) {
                 switch (_state) {
@@ -59,7 +59,7 @@ namespace PascalCompiler.Lexical {
                         } else if (Mappings.CanBeIdentifier(lastChar, true)) {
                             _state = State.IdentifierOrKeyword;
                         } else if (lastChar == '\"') {
-                            sb.Clear();
+                            sb.Clear(); 
                             _state = State.String;
                         } else if (char.IsDigit(lastChar)) {
                             _state = State.Number;
