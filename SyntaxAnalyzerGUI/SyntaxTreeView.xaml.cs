@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using PascalCompiler.Translator.Garbage;
 using Telerik.Windows.Controls;
 using Telerik.Windows.Controls.Diagrams;
 using Telerik.Windows.Diagrams.Core;
@@ -26,8 +27,10 @@ namespace SyntaxAnalyzerGUI
     public partial class SyntaxTreeView : Window
     {
         private SyntaxNode treeRoot;
-        public SyntaxTreeView(SyntaxNode treeRoot) {
+        private readonly List<CodeEntity> cl;
+        public SyntaxTreeView(SyntaxNode treeRoot, List<CodeEntity> cl) {
             this.treeRoot = treeRoot;
+            this.cl = cl;
             InitializeComponent();
         }
 
@@ -89,7 +92,7 @@ namespace SyntaxAnalyzerGUI
         }
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e) {
-            new GarbageTranslatorView(treeRoot).Show();
+            new GarbageTranslatorView(cl).Show();
         }
     }
 }

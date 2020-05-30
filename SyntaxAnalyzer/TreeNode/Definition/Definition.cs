@@ -64,8 +64,8 @@ namespace PascalCompiler.Syntax.TreeNode.Definition
                 throw Util.MakeTypeSyntaxException(GetType(), 2);
             }
 
-            StatementsNode = argNodes[2];
-            StatementNode = argNodes[0];
+            StatementNode = argNodes[2];
+            StatementsNode = argNodes[0];
         }
     }
 

@@ -19,7 +19,17 @@ namespace PascalCompiler.Syntax.Generator
             ProductionDictionary = CommonUtils.MakeProductionRuleDictionary(slr1Table.ProductionRules);
         }
 
-        public SyntaxNode Parse(Queue<LexicalElement> input, HashSet<Item> startPoint, Type acceptNode, List<ParserConfiguration> history = null, List<SyntaxException> exceptions = null) {
+        private class PassthroughVisitor : AbstractVisitor {
+            public override SyntaxNode Visit(SyntaxNode node) {
+                return node;
+            }
+
+            private PassthroughVisitor() {}
+
+            public static readonly PassthroughVisitor Instance = new PassthroughVisitor();
+        }
+
+        public SyntaxNode Parse(Queue<LexicalElement> input, HashSet<Item> startPoint, Type acceptNode, List<ParserConfiguration> history = null, List<SyntaxException> exceptions = null, AbstractVisitor visitor = null) {
             Stack<SyntaxNode> nodeStack = new Stack<SyntaxNode>();
             Stack<AnalyzerState> stateStack = new Stack<AnalyzerState>();
             stateStack.Push(Slr1Table.States[startPoint]);
@@ -45,7 +55,7 @@ namespace PascalCompiler.Syntax.Generator
                             stateStack.Pop();
                             argNodes[i] = nodeStack.Pop();
                         }
-                        nodeStack.Push(reducibleRule.Produce(argNodes));
+                        nodeStack.Push(visitor.Visit(reducibleRule.Produce(argNodes)));
                         stateStack.Push(stateStack.Peek().GotoTable[reducibleRule.Key]);
                    
                     } else {
@@ -71,7 +81,7 @@ namespace PascalCompiler.Syntax.Generator
                                             stateStack.Pop();
                                             argNodes[i] = nodeStack.Pop();
                                         }
-                                        nodeStack.Push(reducibleRule.Produce(argNodes));
+                                        nodeStack.Push(visitor.Visit(reducibleRule.Produce(argNodes)));
                                         stateStack.Push(stateStack.Peek().GotoTable[reducibleRule.Key]);
                                     
                                         break;
@@ -129,7 +139,7 @@ namespace PascalCompiler.Syntax.Generator
                     var nextState = stateStack.Peek().GotoTable[nextKey];
                     var nextNode = Slr1Table.AllowedErrorRecoveryKey[nextKey]();
                     stateStack.Push(nextState);
-                    nodeStack.Push(nextNode);
+                    nodeStack.Push(visitor.Visit(nextNode));
                     ero.Success = true;
                 }
             }

@@ -65,8 +65,8 @@ namespace PascalCompiler.Translator.Garbage
         }
 
         private StatementsNodeVar2 Visit(StatementsNodeVar2 node) {
-            node.StatementNode.Visit(this);
             node.StatementsNode.Visit(this);
+            node.StatementNode.Visit(this);
             return node;
         }
 

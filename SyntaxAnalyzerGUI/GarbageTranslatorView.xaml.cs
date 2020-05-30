@@ -20,21 +20,18 @@ namespace SyntaxAnalyzerGUI
     /// GarbageTranslatorView.xaml 的交互逻辑
     /// </summary>
     public partial class GarbageTranslatorView : Window {
-        private readonly SyntaxNode _treeRoot;
-        public GarbageTranslatorView(SyntaxNode treeRoot)
+        private readonly List<CodeEntity> _codes;
+        public GarbageTranslatorView(List<CodeEntity> codes)
         {
             InitializeComponent();
-            _treeRoot = treeRoot;
+            _codes = codes;
             InitializeListView();
         }
 
         private void InitializeListView() {
-            var translator = new Translator();
-            translator.Visit(_treeRoot);
-            var codes = Translator.ResolveLabels(translator.generatedCode);
             int index = 0;
             var items = new List<ViewItem>();
-            foreach (var code in codes) {
+            foreach (var code in _codes) {
                 items.Add(new ViewItem(index++, code.Code));
             }
 

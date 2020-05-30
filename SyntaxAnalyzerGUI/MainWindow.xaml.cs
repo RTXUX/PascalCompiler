@@ -21,6 +21,7 @@ using PascalCompiler.Syntax;
 using PascalCompiler.Syntax.Generator;
 using PascalCompiler.Syntax.Generator.Utils;
 using PascalCompiler.Syntax.TreeNode.Definition;
+using PascalCompiler.Translator.Garbage;
 using Telerik.Windows.Controls;
 using Telerik.Windows.Controls.Diagrams;
 using Telerik.Windows.Diagrams.Core;
@@ -136,12 +137,12 @@ namespace SyntaxAnalyzerGUI
             var exceptions = new List<SyntaxException>();
             SyntaxNode treeRoot;
             try {
-                
+                var visitor = new TranslatorLR();
                 treeRoot = slr1Driver.Parse(new Queue<LexicalElement>(lexicals),
                     CommonUtils.Closure(
                         new HashSet<Item>()
                             {new Item() {ProductionRule = PascalDefinition.ProductionRules[0], Cursor = 0}},
-                        generator.ProductionDict), typeof(SNode), history, exceptions);
+                        generator.ProductionDict), typeof(SNode), history, exceptions, visitor);
                 if (exceptions.Count > 0) {
                     StringBuilder sb = new StringBuilder();
                     sb.Append($"语法分析器共检测到{exceptions.Count}个错误\n\n");
@@ -152,11 +153,13 @@ namespace SyntaxAnalyzerGUI
 
                     MessageBox.Show(sb.ToString(), "错误", MessageBoxButton.OK, MessageBoxImage.Error);
                 } else {
-                    new SyntaxTreeView(treeRoot).Show();
+                    List<CodeEntry> rc = visitor.properties[treeRoot].code;
+                    var cl = Translator.ResolveLabels(rc);
+                    new SyntaxTreeView(treeRoot, cl).Show();
                 }
                 
                 
-            } catch (Exception ex) {
+            } catch (SyntaxException ex) {
                 StringBuilder sb = new StringBuilder();
                 sb.Append($"语法分析器共检测到{exceptions.Count}个错误，无法恢复\n\n");
                 foreach (var exception in exceptions)
