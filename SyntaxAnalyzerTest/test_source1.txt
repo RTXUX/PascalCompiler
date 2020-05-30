@@ -1,6 +1,6 @@
 program test;
 	    begin
-		 x:=19; 
+		x:=19;
 		for i:=100 downto 15 do
 		    if x<y+(15-9) then y:=x
                      else begin

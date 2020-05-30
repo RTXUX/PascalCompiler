@@ -87,5 +87,9 @@ namespace SyntaxAnalyzerGUI
                 addNodes(syntaxNode, shape);
             }
         }
+
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e) {
+            new GarbageTranslatorView(treeRoot).Show();
+        }
     }
 }

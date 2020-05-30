@@ -84,10 +84,17 @@
     <Compile Include="AnalyzerHistory.xaml.cs">
       <DependentUpon>AnalyzerHistory.xaml</DependentUpon>
     </Compile>
+    <Compile Include="GarbageTranslatorView.xaml.cs">
+      <DependentUpon>GarbageTranslatorView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SyntaxTreeView.xaml.cs">
       <DependentUpon>SyntaxTreeView.xaml</DependentUpon>
     </Compile>
     <Page Include="AnalyzerHistory.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GarbageTranslatorView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -143,6 +150,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GarbageTranslator\GarbageTranslator.csproj">
+      <Project>{ae0e9378-9c9d-4fdc-9c8b-2009040bcb39}</Project>
+      <Name>GarbageTranslator</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LexerGUI\LexerGUI.csproj">
       <Project>{e5fa31c0-a5c4-4678-80a5-147a7191f59e}</Project>
       <Name>LexerGUI</Name>
