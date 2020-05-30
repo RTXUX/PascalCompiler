@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyntaxAnalyzer", "SyntaxAna
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SyntaxAnalyzerGUI", "SyntaxAnalyzerGUI\SyntaxAnalyzerGUI.csproj", "{18BA6BA4-3476-44C2-988D-7EEE065A2766}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GarbageTranslator", "GarbageTranslator\GarbageTranslator.csproj", "{AE0E9378-9C9D-4FDC-9C8B-2009040BCB39}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -90,6 +92,14 @@ Global
 		{18BA6BA4-3476-44C2-988D-7EEE065A2766}.Release|Any CPU.ActiveCfg = Release|x86
 		{18BA6BA4-3476-44C2-988D-7EEE065A2766}.Release|x86.ActiveCfg = Release|x86
 		{18BA6BA4-3476-44C2-988D-7EEE065A2766}.Release|x86.Build.0 = Release|x86
+		{AE0E9378-9C9D-4FDC-9C8B-2009040BCB39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE0E9378-9C9D-4FDC-9C8B-2009040BCB39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE0E9378-9C9D-4FDC-9C8B-2009040BCB39}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AE0E9378-9C9D-4FDC-9C8B-2009040BCB39}.Debug|x86.Build.0 = Debug|Any CPU
+		{AE0E9378-9C9D-4FDC-9C8B-2009040BCB39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE0E9378-9C9D-4FDC-9C8B-2009040BCB39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE0E9378-9C9D-4FDC-9C8B-2009040BCB39}.Release|x86.ActiveCfg = Release|Any CPU
+		{AE0E9378-9C9D-4FDC-9C8B-2009040BCB39}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

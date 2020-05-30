@@ -94,6 +94,8 @@ namespace PascalCompiler.Syntax.Generator
                 }
             }
             table.States = ItemSets;
+            table.FollowSets = FollowSets;
+            table.FirstSets = FirstSets;
             return table;
         }
 

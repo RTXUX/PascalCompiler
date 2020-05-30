@@ -64,7 +64,10 @@ namespace SyntaxAnalyzerGUI
                         ops = $"Shift to {stateIds[so.NextState]}";
                         break;
                     case ReduceOperation ro:
-                        ops = $"Reduce by {ro.ReduceBy.ToString()}";
+                        ops = $"Reduce by {ro.ReduceBy}";
+                        break;
+                    case ErrorRecoveryOperation ero:
+                        ops = $"Error Recovery: {(ero.Success ? "Success" : "Failed")}";
                         break;
                 }
                 dsl.Add(new DisplayState() {

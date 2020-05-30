@@ -76,6 +76,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GarbageTranslator\GarbageTranslator.csproj">
+      <Project>{ae0e9378-9c9d-4fdc-9c8b-2009040bcb39}</Project>
+      <Name>GarbageTranslator</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Lexer\Lexer.csproj">
       <Project>{bd588b83-bd05-4153-8154-85661a7b2034}</Project>
       <Name>Lexer</Name>
@@ -91,6 +95,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="test_source1.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="test_source2.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

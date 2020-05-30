@@ -7,7 +7,6 @@ using PascalCompiler.Lexical.Definition;
 namespace PascalCompiler.Syntax.Generator
 {
     public class SyntaxNode {
-        // Binary Linked List Presentation of Tree
         public List<SyntaxNode> Child { get; set; } = new List<SyntaxNode>();
         public virtual String Tag { get; set; }
 
@@ -16,6 +15,10 @@ namespace PascalCompiler.Syntax.Generator
         public SyntaxNode(SyntaxNode[] argNodes) {
             Child.AddRange(argNodes);
         }
+
+        public virtual SyntaxNode Visit(AbstractVisitor visitor) {
+            return visitor.Visit(this);
+        }
     }
 
     public class TerminalNode : SyntaxNode {
@@ -23,6 +26,12 @@ namespace PascalCompiler.Syntax.Generator
 
         public TerminalNode(LexicalElement lex) {
             Lex = lex;
+        }
+    }
+
+    public abstract class AbstractVisitor {
+        public virtual SyntaxNode Visit(SyntaxNode node) {
+            return node.Visit(this);
         }
     }
 
@@ -166,9 +175,16 @@ namespace PascalCompiler.Syntax.Generator
         public ProductionRule ReduceBy { get; set; }
     }
 
+    public sealed class ErrorRecoveryOperation : AnalyzerOperation {
+        public bool Success { get; set; }
+    }
+
     public class Slr1Table {
         public List<ProductionRule> ProductionRules { get; set; }
         public IReadOnlyDictionary<HashSet<Item>, AnalyzerState> States { get; set; }
+        public Dictionary<object, HashSet<SyntaxPredicate>> FirstSets { get; set; }
+        public Dictionary<object, HashSet<SyntaxPredicate>> FollowSets { get; set; }
+        public Dictionary<object, Func<SyntaxNode>> AllowedErrorRecoveryKey { get; } = new Dictionary<object, Func<SyntaxNode>>();
     }
 
     public class SyntaxException : Exception {

@@ -101,6 +101,7 @@ namespace SyntaxAnalyzerGUI
         private void InitializeSlr1Table() {
             this.generator = new Generator(PascalDefinition.ProductionRules);
             slr1Table = generator.Generate(PascalDefinition.NonTerminalKey.Start);
+            slr1Table.AllowedErrorRecoveryKey.Add(PascalDefinition.NonTerminalKey.Statement, () => new StatementNode(new SyntaxNode[0]));
             slr1Driver = new Slr1Driver(slr1Table);
         }
 
@@ -132,6 +133,7 @@ namespace SyntaxAnalyzerGUI
                 return;
             }
             var history = new List<ParserConfiguration>();
+            var exceptions = new List<SyntaxException>();
             SyntaxNode treeRoot;
             try {
                 
@@ -139,12 +141,30 @@ namespace SyntaxAnalyzerGUI
                     CommonUtils.Closure(
                         new HashSet<Item>()
                             {new Item() {ProductionRule = PascalDefinition.ProductionRules[0], Cursor = 0}},
-                        generator.ProductionDict), typeof(SNode), history);
+                        generator.ProductionDict), typeof(SNode), history, exceptions);
+                if (exceptions.Count > 0) {
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append($"语法分析器共检测到{exceptions.Count}个错误\n\n");
+                    foreach (var exception in exceptions) {
+                        sb.Append(exception.Message);
+                        sb.Append('\n');
+                    }
 
-                new SyntaxTreeView(treeRoot).Show();
+                    MessageBox.Show(sb.ToString(), "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                } else {
+                    new SyntaxTreeView(treeRoot).Show();
+                }
+                
                 
             } catch (Exception ex) {
-                MessageBox.Show(ex.Message, "语法分析错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                StringBuilder sb = new StringBuilder();
+                sb.Append($"语法分析器共检测到{exceptions.Count}个错误，无法恢复\n\n");
+                foreach (var exception in exceptions)
+                {
+                    sb.Append(exception.Message);
+                    sb.Append('\n');
+                }
+                MessageBox.Show(sb.ToString(), $"语法分析错误", MessageBoxButton.OK, MessageBoxImage.Error);
                 //return;
             }
             new AnalyzerHistory(history, slr1Driver.Slr1Table).Show();

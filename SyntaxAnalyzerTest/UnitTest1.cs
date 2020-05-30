@@ -13,6 +13,7 @@ using PascalCompiler.Lexical.Definition;
 using PascalCompiler.Syntax.Generator.Utils;
 using PascalCompiler.Syntax;
 using PascalCompiler.Syntax.TreeNode.Definition;
+using PascalCompiler.Translator.Garbage;
 
 namespace SyntaxAnalyzerTest
 {
@@ -104,6 +105,35 @@ namespace SyntaxAnalyzerTest
                     new HashSet<Item>() {new Item() {ProductionRule = PascalDefinition.ProductionRules[0], Cursor = 0}},
                     driver.ProductionDictionary), typeof(SNode), new List<ParserConfiguration>());
             Assert.IsInstanceOfType(treeRoot, typeof(SNode));
+        }
+
+        [TestMethod]
+        public void TestGarbageTranslator() {
+            var generator = new Generator(PascalDefinition.ProductionRules);
+            var slr1table = generator.Generate(PascalDefinition.NonTerminalKey.Start);
+            var driver = new Slr1Driver(slr1table);
+            List<LexicalElement> lexicalElements = new List<LexicalElement>();
+            using (var file = new FileStream("test_source2.txt", FileMode.Open))
+            {
+                var reader = new StreamReader(file);
+                var l = new LexerStateMachine(reader);
+                l.AdvanceChar();
+                LexicalElement le;
+                while ((le = l.NextToken()) != null)
+                {
+                    if (le is LineFeedElement) continue;
+                    lexicalElements.Add(le);
+                }
+            }
+            var q = new Queue<LexicalElement>(lexicalElements);
+            var treeRoot = driver.Parse(q,
+                CommonUtils.Closure(
+                    new HashSet<Item>() { new Item() { ProductionRule = PascalDefinition.ProductionRules[0], Cursor = 0 } },
+                    driver.ProductionDictionary), typeof(SNode), new List<ParserConfiguration>());
+            Assert.IsInstanceOfType(treeRoot, typeof(SNode));
+            var translator = new Translator();
+            treeRoot.Visit(translator);
+            Translator.ResolveLabels(translator.generatedCode);
         }
 
         [TestMethod]
