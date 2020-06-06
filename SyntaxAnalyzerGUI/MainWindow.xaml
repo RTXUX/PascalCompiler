@@ -31,7 +31,8 @@
                                  AreWordWrapGlyphsVisible="True"
                                  IsLineNumberMarginVisible="True" 
                                  Grid.Column="0" Grid.ColumnSpan="2"/>
-            <Button Grid.Row="1" Content="分析" Click="ToggleAnalyze"/>
+            <Button Grid.Row="1" Grid.Column="0" Content="分析" Click="ToggleAnalyze"/>
+            <Button Grid.Row="1" Grid.Column="1" Content="生成三地址码(自底向上)" Click="TranslateLR" />
         </Grid>
     </telerik:RadDockPanel>
     

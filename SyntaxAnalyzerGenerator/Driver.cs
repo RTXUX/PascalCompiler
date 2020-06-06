@@ -33,6 +33,7 @@ namespace PascalCompiler.Syntax.Generator
             Stack<SyntaxNode> nodeStack = new Stack<SyntaxNode>();
             Stack<AnalyzerState> stateStack = new Stack<AnalyzerState>();
             stateStack.Push(Slr1Table.States[startPoint]);
+            if (visitor == null) visitor = PassthroughVisitor.Instance;
             while (true) {
                 try {
                     if (input.Count == 0) {

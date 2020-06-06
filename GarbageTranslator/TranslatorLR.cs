@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using PascalCompiler.Lexical.Definition;
 using PascalCompiler.Syntax.Generator;
 using PascalCompiler.Syntax.Generator.Utils;
 using PascalCompiler.Syntax.TreeNode.Definition;
@@ -12,6 +13,8 @@ using PascalCompiler.Syntax.TreeNode.Definition;
 namespace PascalCompiler.Translator.Garbage
 {
     public class TranslatorLR : AbstractVisitor {
+        public readonly List<string> Warnings = new List<string>();
+        private readonly List<string> assignedSymbols = new List<string>();
         private int tempCount = 0;
         private int labelCount = 0;
         public readonly Dictionary<SyntaxNode, dynamic> properties = new Dictionary<SyntaxNode, dynamic>();
@@ -81,6 +84,7 @@ namespace PascalCompiler.Translator.Garbage
             props.code = code;
             code.AddRange(properties[node.ExpressionNode].code);
             code.Add(new CodeEntity() {Code = $"{node.Identifier} = {properties[node.ExpressionNode].addr}"});
+            assignedSymbols.Add(node.Identifier);
             return node;
         }
 
@@ -237,6 +241,10 @@ namespace PascalCompiler.Translator.Garbage
             props.code = code;
             switch (node.type) {
                 case 1:
+                    if (!assignedSymbols.Contains(node.Identifier)) {
+                        var ele = (node.Child[0] as TerminalNode).Lex as IdentifierElement;
+                        Warnings.Add($"{ele.LineNumber}:[{ele.StartIndex}, {ele.EndIndex}): Unassigned identifier {node.Identifier}");
+                    }
                     props.addr = node.Identifier;
                     break;
                 case 2:

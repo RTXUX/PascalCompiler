@@ -212,7 +212,7 @@ namespace PascalCompiler.Lexical {
                                         value = Convert.ToInt32(s.Substring(2), 16);
                                     } else if (s.StartsWith("0")) {
                                         // Octal
-                                        value = Convert.ToInt32(s.Substring(1), 8);
+                                        value = Convert.ToInt32(s.Substring(0), 8);
                                     } else {
                                         // Decimal
                                         value = Convert.ToInt32(s);

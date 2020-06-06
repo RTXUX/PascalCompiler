@@ -27,10 +27,8 @@ namespace SyntaxAnalyzerGUI
     public partial class SyntaxTreeView : Window
     {
         private SyntaxNode treeRoot;
-        private readonly List<CodeEntity> cl;
-        public SyntaxTreeView(SyntaxNode treeRoot, List<CodeEntity> cl) {
+        public SyntaxTreeView(SyntaxNode treeRoot) {
             this.treeRoot = treeRoot;
-            this.cl = cl;
             InitializeComponent();
         }
 
@@ -92,7 +90,15 @@ namespace SyntaxAnalyzerGUI
         }
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e) {
+            var translator = new Translator();
+            translator.Visit(treeRoot);
+            var cl = Translator.ResolveLabels(translator.generatedCode);
             new GarbageTranslatorView(cl).Show();
+            if (translator.Warnings.Count != 0)
+            {
+                MessageBox.Show(String.Join("\n", translator.Warnings), "警告", MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+            }
         }
     }
 }

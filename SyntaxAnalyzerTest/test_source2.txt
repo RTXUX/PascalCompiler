@@ -1,7 +1,14 @@
 ﻿program test;
 begin
 	x:=19;
-	for i:=100 downto 15 do
-		if x<y+15 then y:=x
-		else z:=z*7+x
+	y:=1;
+	z:=0;
+	while y<x do 
+	begin
+		if y < 8 then
+			z := z+y
+		else
+			z := z+y+2;
+		y := y+1;
+	end
 end.
