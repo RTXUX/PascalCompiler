@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using PascalCompiler.Translator.Garbage;
 using Telerik.Windows.Controls;
 using Telerik.Windows.Controls.Diagrams;
 using Telerik.Windows.Diagrams.Core;
@@ -89,7 +90,15 @@ namespace SyntaxAnalyzerGUI
         }
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e) {
-            new GarbageTranslatorView(treeRoot).Show();
+            var translator = new Translator();
+            translator.Visit(treeRoot);
+            var cl = Translator.ResolveLabels(translator.generatedCode);
+            new GarbageTranslatorView(cl).Show();
+            if (translator.Warnings.Count != 0)
+            {
+                MessageBox.Show(String.Join("\n", translator.Warnings), "警告", MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+            }
         }
     }
 }

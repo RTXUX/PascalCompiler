@@ -1,0 +1,43 @@
+﻿<Window x:Class="LLVMExecutor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation"
+        xmlns:editor="http://schemas.actiprosoftware.com/winfx/xaml/syntaxeditor"
+        xmlns:local="clr-namespace:LLVMExecutor"
+        mc:Ignorable="d"
+        Title="Pascal-- LLVM" Height="450" Width="800"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    <telerik:RadDockPanel>
+        <telerik:RadMenu VerticalAlignment="Top" telerik:RadDockPanel.Dock="Top">
+            <telerik:RadMenuItem Header="文件">
+                <telerik:RadMenuItem Header="新建" Command="ApplicationCommands.New"/>
+                <telerik:RadMenuItem Header="打开" Command="ApplicationCommands.Open"/>
+                <telerik:RadMenuItem Header="保存" Command="ApplicationCommands.Save" />
+                <telerik:RadMenuItem Header="另存为" Command="ApplicationCommands.SaveAs" />
+                <telerik:RadMenuItem Header="退出" Command="ApplicationCommands.Close"/>
+            </telerik:RadMenuItem>
+            <telerik:RadMenuItem Header="代码">
+                <telerik:RadMenuItem Header="执行" Click="RadMenuItem_OnClick" />
+            </telerik:RadMenuItem>
+        </telerik:RadMenu>
+        <Grid>
+            <Grid.Resources>
+                <local:SymbolViewModel x:Key="SymbolViewModel"/>
+            </Grid.Resources>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <editor:SyntaxEditor x:Name="Editor"
+                                 AreIndentationGuidesVisible="True"
+                                 AreWordWrapGlyphsVisible="True"
+                                 IsLineNumberMarginVisible="True" 
+                                 Grid.Column="0" />
+            <telerik:RadGridView x:Name="SymbolTable"  Grid.Column="1" DataContext="{StaticResource SymbolViewModel}" ItemsSource="{Binding Symbols}" CanUserGroupColumns="False" ShowGroupPanel="False" NewRowPosition="Bottom" GroupRenderMode="Flat" CanUserDeleteRows="True" CellValidating="GridViewDataControl_OnCellValidating"/>
+            <TextBox x:Name="IrBox" Grid.Column="2" IsReadOnly="True"/>
+        </Grid>
+    </telerik:RadDockPanel>
+</Window>

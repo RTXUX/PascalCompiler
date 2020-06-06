@@ -21,6 +21,7 @@ using PascalCompiler.Syntax;
 using PascalCompiler.Syntax.Generator;
 using PascalCompiler.Syntax.Generator.Utils;
 using PascalCompiler.Syntax.TreeNode.Definition;
+using PascalCompiler.Translator.Garbage;
 using Telerik.Windows.Controls;
 using Telerik.Windows.Controls.Diagrams;
 using Telerik.Windows.Diagrams.Core;
@@ -37,7 +38,7 @@ namespace SyntaxAnalyzerGUI
         private string FilePath;
         public MainWindow()
         {
-            FluentPalette.Palette.FontFamily = new FontFamily("Sarasa Mono SC");
+            FluentPalette.Palette.FontFamily = new FontFamily("Microsoft YaHei");
             FluentPalette.Palette.FontSize = 16;
             StyleManager.ApplicationTheme = new FluentTheme();
             InitializeComponent();
@@ -136,7 +137,6 @@ namespace SyntaxAnalyzerGUI
             var exceptions = new List<SyntaxException>();
             SyntaxNode treeRoot;
             try {
-                
                 treeRoot = slr1Driver.Parse(new Queue<LexicalElement>(lexicals),
                     CommonUtils.Closure(
                         new HashSet<Item>()
@@ -156,7 +156,7 @@ namespace SyntaxAnalyzerGUI
                 }
                 
                 
-            } catch (Exception ex) {
+            } catch (SyntaxException ex) {
                 StringBuilder sb = new StringBuilder();
                 sb.Append($"语法分析器共检测到{exceptions.Count}个错误，无法恢复\n\n");
                 foreach (var exception in exceptions)
@@ -171,5 +171,81 @@ namespace SyntaxAnalyzerGUI
 
         }
 
+        private void TranslateLR(object sender, RoutedEventArgs e) {
+            var lexicals = new List<LexicalElement>();
+            try
+            {
+                using (var ms = new MemoryStream())
+                {
+                    var writer = new StreamWriter(ms);
+                    writer.Write(Editor.Document.CurrentSnapshot.GetText(LineTerminator.Newline));
+                    writer.Flush();
+                    ms.Seek(0L, SeekOrigin.Begin);
+                    var reader = new StreamReader(ms);
+                    var l = new LexerStateMachine(reader);
+                    l.AdvanceChar();
+                    LexicalElement t;
+                    while ((t = l.NextToken()) != null)
+                    {
+                        if (t is LineFeedElement) continue;
+                        lexicals.Add(t);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "词法错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            var history = new List<ParserConfiguration>();
+            var exceptions = new List<SyntaxException>();
+            SyntaxNode treeRoot;
+            try
+            {
+                var translator = new TranslatorLR();
+                treeRoot = slr1Driver.Parse(new Queue<LexicalElement>(lexicals),
+                    CommonUtils.Closure(
+                        new HashSet<Item>()
+                            {new Item() {ProductionRule = PascalDefinition.ProductionRules[0], Cursor = 0}},
+                        generator.ProductionDict), typeof(SNode), history, exceptions, translator);
+                if (exceptions.Count > 0)
+                {
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append($"语法分析器共检测到{exceptions.Count}个错误\n\n");
+                    foreach (var exception in exceptions)
+                    {
+                        sb.Append(exception.Message);
+                        sb.Append('\n');
+                    }
+
+                    MessageBox.Show(sb.ToString(), "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                else
+                {
+                    new SyntaxTreeView(treeRoot).Show();
+                    var cl = Translator.ResolveLabels(translator.properties[treeRoot].code);
+                    new GarbageTranslatorView(cl).Show();
+                    if (translator.Warnings.Count != 0) {
+                        MessageBox.Show(String.Join("\n", translator.Warnings), "警告", MessageBoxButton.OK,
+                            MessageBoxImage.Warning);
+                    }
+                }
+
+
+            }
+            catch (SyntaxException ex)
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append($"语法分析器共检测到{exceptions.Count}个错误，无法恢复\n\n");
+                foreach (var exception in exceptions)
+                {
+                    sb.Append(exception.Message);
+                    sb.Append('\n');
+                }
+                MessageBox.Show(sb.ToString(), $"语法分析错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                //return;
+            }
+            new AnalyzerHistory(history, slr1Driver.Slr1Table).Show();
+        }
     }
 }

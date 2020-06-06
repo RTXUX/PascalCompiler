@@ -13,7 +13,7 @@
             <RowDefinition Height="30" />
         </Grid.RowDefinitions>
         <telerik:RadDiagram x:Name="Diagram" RouteConnections="True" Grid.Row="0"/>
-        <Button Content="生成三地址码" Grid.Row="1" Click="ButtonBase_OnClick" />
-
+        <Button Content="生成三地址码(自顶向下)" Grid.Row="1" Click="ButtonBase_OnClick" />
+        
     </Grid>
 </Window>
